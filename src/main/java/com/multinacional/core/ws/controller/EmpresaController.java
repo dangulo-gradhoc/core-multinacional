@@ -30,22 +30,22 @@ public class EmpresaController {
     }
 
     @GetMapping("/listar/{id}")
-    public ResponseEntity<EmpresaOutputDto> findByEmpresaId(@PathVariable Long id) {
+    public ResponseEntity<EmpresaOutputDto> findByEmpresa(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
         }
         log.debug("findByEmpresaId {}", id);
-        return ResponseEntity.ok(empresaService.findByEmpresaId(id));
+        return ResponseEntity.ok(empresaService.findByEmpresa(id));
 
     }
 
     @GetMapping("/listarMin/{id}")
-    public ResponseEntity<EmpresaMinOutputDto> findMinByEmpresaId(@PathVariable Long id) {
+    public ResponseEntity<EmpresaMinOutputDto> findMinByEmpresa(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
         }
         log.debug("findByEmpresaId {}", id);
-        return ResponseEntity.ok(empresaService.findMinByEmpresaID(id));
+        return ResponseEntity.ok(empresaService.findMinByEmpresa(id));
 
     }
 }

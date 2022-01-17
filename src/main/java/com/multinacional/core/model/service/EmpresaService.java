@@ -26,14 +26,12 @@ public class EmpresaService implements IEmpresaService {
 
     @Override
     public List<EmpresaOutputDto> findAll() {
-        List<Empresa> entidades = new ArrayList<>();
-        entidades = empresaDAO.findAll();
-        List<EmpresaOutputDto> listaFinal = empresaMapper.convertToEmpresaOutputDtoList(entidades);
-        return listaFinal;
+        List<Empresa> entidades = empresaDAO.findAll();
+        return empresaMapper.convertToEmpresaOutputDtoList(entidades);
     }
 
     @Override
-    public EmpresaOutputDto findByEmpresaId(Long id) {
+    public EmpresaOutputDto findByEmpresa(Long id) {
         Optional<Empresa> opEmpresa = empresaDAO.findById(id);
         EmpresaOutputDto empresaOutDto = new EmpresaOutputDto();
         if (opEmpresa.isPresent()) {
@@ -43,7 +41,7 @@ public class EmpresaService implements IEmpresaService {
     }
 
     @Override
-    public EmpresaMinOutputDto findMinByEmpresaID(Long id) {
+    public EmpresaMinOutputDto findMinByEmpresa(Long id) {
         Optional<Empresa> opEmpresa = empresaDAO.findById(id);
         EmpresaMinOutputDto empresaMinOutDto = new EmpresaMinOutputDto();
         if (opEmpresa.isPresent()) {

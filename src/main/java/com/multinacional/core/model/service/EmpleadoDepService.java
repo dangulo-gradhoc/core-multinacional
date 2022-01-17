@@ -1,6 +1,7 @@
 package com.multinacional.core.model.service;
 
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
+import com.multinacional.core.api.dto.empleadodep.EmpleadoDepMinOutputDto;
 import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import com.multinacional.core.api.service.IEmpleadoDepService;
 import com.multinacional.core.model.entity.Empleado;
@@ -35,5 +36,15 @@ public class EmpleadoDepService implements IEmpleadoDepService {
             BeanUtils.copyProperties(opEmployableDep.get(), employableDepOutDto);
         }
         return employableDepOutDto;
+    }
+
+    @Override
+    public EmpleadoDepMinOutputDto findMinByEmpleadoDep(Long idEmployableDep) {
+        Optional<EmpleadoDep> opEmployableDep = empleadoDepDAO.findById(idEmployableDep);
+        EmpleadoDepMinOutputDto employableDepMinOutDto = new EmpleadoDepMinOutputDto();
+        if (opEmployableDep.isPresent()) {
+            BeanUtils.copyProperties(opEmployableDep.get(), employableDepMinOutDto);
+        }
+        return employableDepMinOutDto;
     }
 }

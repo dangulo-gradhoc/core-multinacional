@@ -6,11 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface IEmpresaService {
     List<EmpresaOutputDto> findAll();
 
-    EmpresaOutputDto findByEmpresaId(Long idEmpresa);
+    EmpresaOutputDto findByEmpresa(Long idEmpresa);
 
-    EmpresaMinOutputDto findMinByEmpresaID(Long idEmpresa);
+    EmpresaMinOutputDto findMinByEmpresa(Long idEmpresa);
 }
