@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoOutputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoOutputMinDto;
 
 @Repository
 public interface IDepartamentoService {
 
-    List<DepartamentoOutputDto> findAll();
+    List<DepartamentoOutputMinDto> findAll();
 
-    DepartamentoOutputDto findByDepartamento(Long idDepartamento);
+    DepartamentoOutputMinDto findByDepartamento(Long idDepartamento);
 }

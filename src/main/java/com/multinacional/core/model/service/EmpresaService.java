@@ -34,8 +34,8 @@ public class EmpresaService implements IEmpresaService {
 
     @Override
     public List<EmpresaOutputDto> findAll() {
-        List<Empresa> entidades = IEmpresaDAO.findAll();
-        return empresaMapper.convertToEmpresaOutputDtoList(entidades);
+        List<Empresa> entities = IEmpresaDAO.findAll();
+        return empresaMapper.convertToEmpresaOutputDtoList(entities);
     }
 
     @Override

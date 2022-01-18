@@ -11,5 +11,4 @@ import com.multinacional.core.model.entity.Tipo;
 @Repository
 public interface ITipoDAO extends JpaRepository<Tipo, Long> {
 
-    Optional<Tipo> findById(Long id);
 }

@@ -4,6 +4,7 @@ package com.multinacional.core.model.mapper;
 import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import com.multinacional.core.model.entity.EmpleadoDep;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

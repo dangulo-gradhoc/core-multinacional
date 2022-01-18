@@ -11,5 +11,4 @@ import com.multinacional.core.model.entity.Empleado;
 @Repository
 public interface IEmpleadoDAO extends JpaRepository<Empleado, Long> {
 
-    Optional<Empleado> findById(Long id);
 }

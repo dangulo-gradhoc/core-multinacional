@@ -10,6 +10,5 @@ import com.multinacional.core.model.entity.EmpleadoDep;
 @Repository
 public interface IEmpleadoDepDAO extends JpaRepository<EmpleadoDep, Long> {
 
-    Optional<EmpleadoDep> findById(Long id);
 
 }

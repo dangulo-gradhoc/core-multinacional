@@ -9,5 +9,4 @@ import com.multinacional.core.model.entity.Empresa;
 @Repository
 public interface IEmpresaDAO extends JpaRepository<Empresa, Long> {
 
-//    Optional<Empresa> findById(Long id);
 }

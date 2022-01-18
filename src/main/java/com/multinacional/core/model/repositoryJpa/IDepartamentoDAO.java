@@ -11,5 +11,4 @@ import com.multinacional.core.model.entity.Departamento;
 @Repository
 public interface IDepartamentoDAO extends JpaRepository<Departamento, Long> {
 
-    Optional<Departamento> findById(Long id);
 }
