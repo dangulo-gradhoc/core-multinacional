@@ -41,7 +41,7 @@ public class Empresa implements Serializable {
     private String direccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idTipo", referencedColumnName = "id")
+    @JoinColumn(name = "codTipo", referencedColumnName = "id")
     private Tipo tipo;
 
     @ManyToMany

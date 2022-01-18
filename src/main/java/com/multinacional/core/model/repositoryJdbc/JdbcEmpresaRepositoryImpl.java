@@ -20,18 +20,18 @@ public class JdbcEmpresaRepositoryImpl implements IJdbcEmpresaRepository{
     @Override
     public Page<EmpresaMinOutputDto> findAllEmpresasMinByTipo(String nombreTipo, Pageable paging) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT E.id, E.nombre FROM multinacional.empresa E INNER JOIN multinacional.tipo T ON E.codTipo=T.id WHERE T.nombre =")
-                .append(nombreTipo);
-        List<EmpresaMinOutputDto> empresasList = jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(EmpresaMinOutputDto.class));
+        query.append("SELECT E.id, E.nombre FROM multinacional.empresa E INNER JOIN multinacional.tipo T ON E.codTipo=T.id WHERE T.nombre =  ?");
+
+        List<EmpresaMinOutputDto> empresasList = jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(EmpresaMinOutputDto.class), nombreTipo);
         return new PageImpl<>(empresasList, paging, countEmpresaMinByInstalacion(nombreTipo));
     }
     private Long countEmpresaMinByInstalacion(String nombreTipo){
 
         StringBuilder query = new StringBuilder();
-        query.append(" SELECT COUNT(*) FROM empresa AS E ")
-                .append("WHERE ").append(nombreTipo);
+        query.append("SELECT COUNT(*) FROM multinacional.empresa E INNER JOIN multinacional.tipo T ON E.codTipo=T.id WHERE T.nombre = ?");
 
-        return jdbcTemplate.queryForObject(query.toString(), Long.class);
+
+        return jdbcTemplate.queryForObject(query.toString(), Long.class, nombreTipo);
     }
 
 }
