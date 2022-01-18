@@ -11,7 +11,7 @@ import com.multinacional.core.api.dto.tipo.TipoOutputDto;
 import com.multinacional.core.api.service.ITipoService;
 import com.multinacional.core.model.entity.Tipo;
 import com.multinacional.core.model.mapper.TipoMapper;
-import com.multinacional.core.model.repository.TipoDAO;
+import com.multinacional.core.model.repositoryJpa.ITipoDAO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,14 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TipoService implements ITipoService {
 
-    private final TipoDAO tipoDAO;
+    private final ITipoDAO ITipoDAO;
 
     private final TipoMapper tipoMapper;
 
     @Override
     public List<TipoOutputDto> findAll() {
         List<Tipo> entidades = new ArrayList<>();
-        entidades = tipoDAO.findAll();
+        entidades = ITipoDAO.findAll();
         List<TipoOutputDto> listaFinal = tipoMapper.convertToTipoOutputDtoList(entidades);
         return listaFinal;
     }
@@ -34,7 +34,7 @@ public class TipoService implements ITipoService {
     @Override
     public TipoOutputDto findByTipo(Long id) {
 
-        Optional<Tipo> opTipo = tipoDAO.findById(id);
+        Optional<Tipo> opTipo = ITipoDAO.findById(id);
         TipoOutputDto tipoOutputDto = new TipoOutputDto();
         if (opTipo.isPresent()) {
             BeanUtils.copyProperties(opTipo.get(), tipoOutputDto);

@@ -1,4 +1,4 @@
-package com.multinacional.core.model.repository;
+package com.multinacional.core.model.repositoryJpa;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import com.multinacional.core.model.entity.Empleado;
 
 
 @Repository
-public interface EmpleadoDAO extends JpaRepository<Empleado, Long> {
+public interface IEmpleadoDAO extends JpaRepository<Empleado, Long> {
 
     Optional<Empleado> findById(Long id);
 }

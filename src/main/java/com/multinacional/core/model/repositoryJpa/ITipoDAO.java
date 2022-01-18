@@ -1,4 +1,4 @@
-package com.multinacional.core.model.repository;
+package com.multinacional.core.model.repositoryJpa;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import com.multinacional.core.model.entity.Tipo;
 
 
 @Repository
-public interface TipoDAO extends JpaRepository<Tipo, Long> {
+public interface ITipoDAO extends JpaRepository<Tipo, Long> {
 
     Optional<Tipo> findById(Long id);
 }

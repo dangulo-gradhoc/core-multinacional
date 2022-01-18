@@ -1,13 +1,12 @@
 package com.multinacional.core.ws.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.multinacional.core.api.dto.generic.ListaGenericDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.multinacional.core.api.dto.empresa.EmpresaMinOutputDto;
 import com.multinacional.core.api.dto.empresa.EmpresaOutputDto;
@@ -47,5 +46,13 @@ public class EmpresaController {
         log.debug("findByEmpresaId {}", id);
         return ResponseEntity.ok(empresaService.findMinByEmpresa(id));
 
+    }
+
+    @GetMapping("/listarMin/tipo/{nombreTipo}")
+    public ResponseEntity<ListaGenericDto<EmpresaMinOutputDto>> findAllEmpresasMinByInstalacion(@PathVariable String nombreTipo,
+                                                                                                @RequestParam Optional<Integer> pageNo,
+                                                                                                @RequestParam Optional<Integer> pageSize){
+
+        return ResponseEntity.ok(empresaService.findAllEmpresasMinByTipo(nombreTipo, pageNo, pageSize));
     }
 }

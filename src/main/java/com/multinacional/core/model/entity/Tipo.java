@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tipos")
+@Table(name = "tipo")
 public class Tipo implements Serializable {
 
     private static final long serialVersionUID = -4184727632403175636L;

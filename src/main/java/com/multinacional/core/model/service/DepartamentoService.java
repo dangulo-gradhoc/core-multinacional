@@ -1,6 +1,5 @@
 package com.multinacional.core.model.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,7 @@ import com.multinacional.core.api.dto.departamento.DepartamentoOutputDto;
 import com.multinacional.core.api.service.IDepartamentoService;
 import com.multinacional.core.model.entity.Departamento;
 import com.multinacional.core.model.mapper.DepartamentoMapper;
-import com.multinacional.core.model.repository.DepartamentoDAO;
+import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,19 +18,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DepartamentoService implements IDepartamentoService {
 
-    private final DepartamentoDAO departamentoDAO;
+    private final IDepartamentoDAO IDepartamentoDAO;
 
     private final DepartamentoMapper departamentoMapper;
 
     @Override
     public List<DepartamentoOutputDto> findAll() {
-        List<Departamento> entities = departamentoDAO.findAll();
+        List<Departamento> entities = IDepartamentoDAO.findAll();
         return departamentoMapper.convertToDepartamentoOutputDtoList(entities);
     }
 
     @Override
     public DepartamentoOutputDto findByDepartamento(Long id) {
-        Optional<Departamento> opDepartment = departamentoDAO.findById(id);
+        Optional<Departamento> opDepartment = IDepartamentoDAO.findById(id);
         DepartamentoOutputDto departmentOutDto = new DepartamentoOutputDto();
         if (opDepartment.isPresent()) {
             BeanUtils.copyProperties(opDepartment.get(), departmentOutDto);

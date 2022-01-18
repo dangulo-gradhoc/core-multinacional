@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "departamentos")
+@Table(name = "departamento")
 public class Departamento implements Serializable {
 
     private static final long serialVersionUID = -8533711227346499257L;

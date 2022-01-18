@@ -1,4 +1,4 @@
-package com.multinacional.core.model.repository;
+package com.multinacional.core.model.repositoryJpa;
 
 import java.util.Optional;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.multinacional.core.model.entity.EmpleadoDep;
 
 @Repository
-public interface EmpleadoDepDAO extends JpaRepository<EmpleadoDep, Long> {
+public interface IEmpleadoDepDAO extends JpaRepository<EmpleadoDep, Long> {
 
     Optional<EmpleadoDep> findById(Long id);
 
