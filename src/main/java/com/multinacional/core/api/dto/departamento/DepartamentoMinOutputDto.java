@@ -3,7 +3,7 @@ package com.multinacional.core.api.dto.departamento;
 import lombok.Data;
 
 @Data
-public class DepartamentoOutputMinDto {
+public class DepartamentoMinOutputDto {
 
     private Long id;
 

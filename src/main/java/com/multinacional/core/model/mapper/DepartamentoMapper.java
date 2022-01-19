@@ -1,15 +1,14 @@
 package com.multinacional.core.model.mapper;
 
-import java.util.List;
-
-import com.multinacional.core.api.dto.departamento.DepartamentoOutputMinDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
+import com.multinacional.core.model.entity.Departamento;
 import org.mapstruct.Mapper;
 
-import com.multinacional.core.model.entity.Departamento;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DepartamentoMapper {
 
-    List<DepartamentoOutputMinDto> convertToDepartamentoOutputDtoList(List<Departamento> entities);
+    List<DepartamentoMinOutputDto> convertToDepartamentoOutputDtoList(List<Departamento> entities);
 
 }

@@ -1,6 +1,6 @@
 package com.multinacional.core.api.dto.empleadodep;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoOutputMinDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ public class EmpleadoDepOutputDto {
 
     private EmpleadoMinOutputDto empleado;
 
-    private DepartamentoOutputMinDto departamento;
+    private DepartamentoMinOutputDto departamento;
 
     private String cargo;
 

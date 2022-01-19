@@ -1,14 +1,13 @@
 package com.multinacional.core.ws.controller;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoOutputMinDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
+import com.multinacional.core.api.dto.generic.ListaGenericDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.multinacional.core.api.service.IDepartamentoService;
 
@@ -23,13 +22,13 @@ public class DepartamentoController {
     private IDepartamentoService departamentoService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<DepartamentoOutputMinDto>> findAll() {
+    public ResponseEntity<List<DepartamentoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(departamentoService.findAll());
     }
 
     @GetMapping("/listar/{id}")
-    public ResponseEntity<DepartamentoOutputMinDto> findByTipoId(@PathVariable Long id) {
+    public ResponseEntity<DepartamentoMinOutputDto> findByTipoId(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -37,4 +36,5 @@ public class DepartamentoController {
         return ResponseEntity.ok(departamentoService.findByDepartamento(id));
 
     }
+
 }

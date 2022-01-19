@@ -23,9 +23,9 @@ public class JdbcEmpresaRepositoryImpl implements IJdbcEmpresaRepository{
         query.append("SELECT E.id, E.nombre FROM multinacional.empresa E INNER JOIN multinacional.tipo T ON E.codTipo=T.id WHERE T.nombre =  ?");
 
         List<EmpresaMinOutputDto> empresasList = jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(EmpresaMinOutputDto.class), nombreTipo);
-        return new PageImpl<>(empresasList, paging, countEmpresaMinByInstalacion(nombreTipo));
+        return new PageImpl<>(empresasList, paging, countEmpresaMinByTipo(nombreTipo));
     }
-    private Long countEmpresaMinByInstalacion(String nombreTipo){
+    private Long countEmpresaMinByTipo(String nombreTipo){
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT COUNT(*) FROM multinacional.empresa E INNER JOIN multinacional.tipo T ON E.codTipo=T.id WHERE T.nombre = ?");
