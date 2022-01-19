@@ -28,7 +28,7 @@ public class DepartamentoController {
 
         return ResponseEntity.ok(departamentoService.findAll());
     }
-    @PostMapping("/creardepartamento")
+    @PostMapping("/crear")
     public ResponseEntity<DepartamentoMinOutputDto>  create(@Valid @RequestBody DepartamentoInputDto departamentoInputDto) {
         log.debug("Departamento create");
         try {
@@ -36,7 +36,6 @@ public class DepartamentoController {
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
         }
-
     }
 
     @GetMapping("/listar/{id}")

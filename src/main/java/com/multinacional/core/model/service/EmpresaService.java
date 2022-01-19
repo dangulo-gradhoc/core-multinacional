@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmpresaService implements IEmpresaService {
 
-    private final IEmpresaDAO IEmpresaDAO;
+    private final IEmpresaDAO empresaDAO;
 
     private final IJdbcEmpresaRepository jdbcEmpresaRepository;
 
@@ -34,13 +34,13 @@ public class EmpresaService implements IEmpresaService {
 
     @Override
     public List<EmpresaOutputDto> findAll() {
-        List<Empresa> entities = IEmpresaDAO.findAll();
+        List<Empresa> entities = empresaDAO.findAll();
         return empresaMapper.convertToEmpresaOutputDtoList(entities);
     }
 
     @Override
     public EmpresaOutputDto findByEmpresa(Long id) {
-        Optional<Empresa> opEmpresa = IEmpresaDAO.findById(id);
+        Optional<Empresa> opEmpresa = empresaDAO.findById(id);
         EmpresaOutputDto empresaOutDto = new EmpresaOutputDto();
         if (opEmpresa.isPresent()) {
             BeanUtils.copyProperties(opEmpresa.get(), empresaOutDto);
@@ -50,7 +50,7 @@ public class EmpresaService implements IEmpresaService {
 
     @Override
     public EmpresaMinOutputDto findMinByEmpresa(Long id) {
-        Optional<Empresa> opEmpresa = IEmpresaDAO.findById(id);
+        Optional<Empresa> opEmpresa = empresaDAO.findById(id);
         EmpresaMinOutputDto empresaMinOutDto = new EmpresaMinOutputDto();
         if (opEmpresa.isPresent()) {
             BeanUtils.copyProperties(opEmpresa.get(), empresaMinOutDto);

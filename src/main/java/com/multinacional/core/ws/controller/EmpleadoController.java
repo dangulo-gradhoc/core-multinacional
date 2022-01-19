@@ -1,16 +1,17 @@
 package com.multinacional.core.ws.controller;
 
+import com.multinacional.core.api.dto.empleado.EmpleadoInputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
+import com.multinacional.core.api.service.IDepartamentoService;
 import com.multinacional.core.api.service.IEmpleadoService;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -47,4 +48,13 @@ public class EmpleadoController {
 
     }
 
+    @PostMapping("/crear")
+    public  ResponseEntity<EmpleadoOutputDto> create(@Valid @RequestBody EmpleadoInputDto inputDto){
+        try{
+        return ResponseEntity.ok(empleadoService.create(inputDto));
+
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

@@ -12,4 +12,6 @@ public interface EmpresaMapper {
 
     List<EmpresaOutputDto> convertToEmpresaOutputDtoList(List<Empresa> entities);
 
+    EmpresaOutputDto convertToEmpresaOutputDto(Empresa entity);
+
 }
