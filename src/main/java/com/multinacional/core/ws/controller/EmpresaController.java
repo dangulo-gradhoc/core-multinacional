@@ -3,6 +3,7 @@ package com.multinacional.core.ws.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ import com.multinacional.core.api.dto.empresa.EmpresaOutputDto;
 import com.multinacional.core.api.service.IEmpresaService;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -28,6 +32,18 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaService.findAll());
     }
 
+    @PostMapping("/crear")
+    public ResponseEntity<EmpresaOutputDto> create(@Valid @RequestBody EmpresaInputDto inputDto){
+        log.debug("Empresa create");
+        try{
+            return ResponseEntity.ok(empresaService.create(inputDto));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+        catch (EntityNotFoundException en){
+            return ResponseEntity.notFound().build();
+        }
+    }
     @GetMapping("/listar/{id}")
     public ResponseEntity<EmpresaOutputDto> findByEmpresa(@PathVariable Long id) {
         if (id == null) {

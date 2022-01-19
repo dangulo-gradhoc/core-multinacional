@@ -1,10 +1,14 @@
 package com.multinacional.core.model.service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.model.entity.Departamento;
 import com.multinacional.core.model.repositoryJdbc.IJdbcEmpresaRepository;
+import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
+import com.multinacional.core.model.repositoryJpa.ITipoDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -21,13 +25,18 @@ import com.multinacional.core.model.mapper.EmpresaMapper;
 import com.multinacional.core.model.repositoryJpa.IEmpresaDAO;
 
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmpresaService implements IEmpresaService {
 
     private final IEmpresaDAO empresaDAO;
-
+    private final ITipoDAO tipoDao;
+    private final IDepartamentoDAO departamentoDAO;
     private final IJdbcEmpresaRepository jdbcEmpresaRepository;
 
     private final EmpresaMapper empresaMapper;
@@ -37,7 +46,30 @@ public class EmpresaService implements IEmpresaService {
         List<Empresa> entities = empresaDAO.findAll();
         return empresaMapper.convertToEmpresaOutputDtoList(entities);
     }
+    @Override
+    @Transactional
+    public EmpresaOutputDto create(EmpresaInputDto inputDto) throws IllegalArgumentException{
+        if(inputDto.getId() != null){
+            throw new IllegalArgumentException("La empresa ya existe");
+        }
+        if(inputDto.getNombre()==null){
+            throw new IllegalArgumentException("El nombre no puede ser null");
+        }
+        final Empresa empresa = new Empresa();
+        BeanUtils.copyProperties(inputDto, empresa, "tipo", "codsDepartamentos");
 
+        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(() -> new EntityNotFoundException()));
+//        Set<Departamento> listaDepartamento = new HashSet<>();
+//        for (Long dep : inputDto.getCodsDepartamentos()) {
+//            listaDepartamento.add( departamentoDAO.findById(dep).get());
+//        }
+//        empresa.setListaDepartamento(listaDepartamento);
+
+        empresa.setListaDepartamento(inputDto.getCodsDepartamentos().stream().map(
+                dep -> departamentoDAO.findById(dep).get()).collect(Collectors.toSet()));
+
+        return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
+    }
     @Override
     public EmpresaOutputDto findByEmpresa(Long id) {
         Optional<Empresa> opEmpresa = empresaDAO.findById(id);

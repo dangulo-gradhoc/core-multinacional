@@ -50,6 +50,7 @@ public class EmpleadoController {
 
     @PostMapping("/crear")
     public  ResponseEntity<EmpleadoOutputDto> create(@Valid @RequestBody EmpleadoInputDto inputDto){
+        log.debug("Empleado create");
         try{
         return ResponseEntity.ok(empleadoService.create(inputDto));
 

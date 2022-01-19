@@ -1,5 +1,6 @@
 package com.multinacional.core.api.service;
 
+import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
 import com.multinacional.core.api.dto.empresa.EmpresaMinOutputDto;
 import com.multinacional.core.api.dto.empresa.EmpresaOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
@@ -10,6 +11,8 @@ import java.util.Optional;
 
 public interface IEmpresaService {
     List<EmpresaOutputDto> findAll();
+
+    EmpresaOutputDto create(EmpresaInputDto inputDto);
 
     EmpresaOutputDto findByEmpresa(Long idEmpresa);
 

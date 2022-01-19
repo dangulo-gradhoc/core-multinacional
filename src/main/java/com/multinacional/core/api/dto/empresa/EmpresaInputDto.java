@@ -1,7 +1,10 @@
 package com.multinacional.core.api.dto.empresa;
 
 import com.multinacional.core.api.dto.tipo.TipoOutputDto;
+import com.multinacional.core.model.entity.Departamento;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 public class EmpresaInputDto {
@@ -12,6 +15,8 @@ public class EmpresaInputDto {
 
     private String direccion;
 
-    private TipoOutputDto tipo;
+    private Long codTipo;
+
+    private Set<Long> codsDepartamentos;
 
 }

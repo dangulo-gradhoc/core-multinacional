@@ -30,7 +30,7 @@ public class EmpleadoService implements IEmpleadoService {
     @Override
     public EmpleadoOutputDto create(EmpleadoInputDto inputDto) throws IllegalArgumentException{
         if(inputDto.getId() != null){
-            throw new IllegalArgumentException("El departamento ya existe");
+            throw new IllegalArgumentException("Le emplead@ ya existe");
         }
         if(inputDto.getDni()==null){
             throw new IllegalArgumentException("El DNI no puede ser null");
