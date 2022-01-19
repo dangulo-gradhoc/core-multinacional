@@ -48,7 +48,7 @@ public class EmpresaController {
 
     }
 
-    @GetMapping("/listarMin/tipo/{nombreTipo}")
+    @GetMapping("/tipos/listarMin/{nombreTipo}")
     public ResponseEntity<ListaGenericDto<EmpresaMinOutputDto>> findAllEmpresasMinByInstalacion(@PathVariable String nombreTipo,
                                                                                                 @RequestParam Optional<Integer> pageNo,
                                                                                                 @RequestParam Optional<Integer> pageSize){

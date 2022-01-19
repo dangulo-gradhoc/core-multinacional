@@ -8,4 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface IJdbcEmpresaRepository {
 
     Page<EmpresaMinOutputDto> findAllEmpresasMinByTipo(String nombreTipo, Pageable paging);
+
 }

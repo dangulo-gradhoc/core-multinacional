@@ -1,43 +1,63 @@
 package com.multinacional.core.model.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.multinacional.core.api.dto.departamento.DepartamentoInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
-import com.multinacional.core.api.dto.empresadep.EmpresaDepMinOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.api.service.IDepartamentoService;
+import com.multinacional.core.model.entity.Departamento;
+import com.multinacional.core.model.mapper.DepartamentoMapper;
+import com.multinacional.core.model.repositoryJdbc.JdbcDepartamentoRepositoryImpl;
+import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.multinacional.core.api.service.IDepartamentoService;
-import com.multinacional.core.model.entity.Departamento;
-import com.multinacional.core.model.mapper.DepartamentoMapper;
-import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
-
+@Slf4j
 @Service
+
 @RequiredArgsConstructor
 public class DepartamentoService implements IDepartamentoService {
 
-    private final IDepartamentoDAO IDepartamentoDAO;
+    private final IDepartamentoDAO departamentoDAO;
 
-    private final IJdbcEmpresaDepRepository jdbcEmpresaDepRepository;
+    private final JdbcDepartamentoRepositoryImpl jdbcDepartamentoRepository;
 
     private final DepartamentoMapper departamentoMapper;
 
     @Override
     public List<DepartamentoMinOutputDto> findAll() {
-        List<Departamento> entities = IDepartamentoDAO.findAll();
+        List<Departamento> entities = departamentoDAO.findAll();
         return departamentoMapper.convertToDepartamentoOutputDtoList(entities);
     }
 
     @Override
+    @Transactional
+    public DepartamentoMinOutputDto create(DepartamentoInputDto inputDto) throws IllegalArgumentException{
+        if(inputDto.getId() != null){
+            throw new IllegalArgumentException("El departamento ya existe");
+        }
+        if(inputDto.getNombre()==null){
+            throw new IllegalArgumentException("El nombre no puede ser null");
+        }
+        final Departamento departamento=new Departamento();
+        BeanUtils.copyProperties(inputDto, departamento, "Set<Empresas>","Set<EmpleadoDep>");
+        departamentoDAO.save(departamento);
+
+        return departamentoMapper.convertToDepartamentoOutputDto(departamento);
+    }
+
+    @Override
     public DepartamentoMinOutputDto findByDepartamento(Long id) {
-        Optional<Departamento> opDepartment = IDepartamentoDAO.findById(id);
+        Optional<Departamento> opDepartment = departamentoDAO.findById(id);
         DepartamentoMinOutputDto departmentOutDto = new DepartamentoMinOutputDto();
         if (opDepartment.isPresent()) {
             BeanUtils.copyProperties(opDepartment.get(), departmentOutDto);
@@ -47,17 +67,17 @@ public class DepartamentoService implements IDepartamentoService {
     }
 
     @Override
-    public ListaGenericDto<EmpresaDepMinOutputDto> findAll(Optional<Integer> pageNo, Optional<Integer> pageSize) {
+    public ListaGenericDto<DepartamentoMinOutputDto> findAllDepartamentosByEmpresas(Long idEmpresa, Optional<Integer> pageNo, Optional<Integer> pageSize) {
+        log.info("Solicitando Empresas el nombre de tipo -> {}", idEmpresa);
+        Pageable paging = PageRequest.of(pageNo.orElse(0), pageSize.orElse(Integer.MAX_VALUE),
+                Sort.by("id").ascending());
 
-        Pageable paging = PageRequest.of(pageNo.orElse(0), pageSize.orElse(Integer.MAX_VALUE));
+        Page<DepartamentoMinOutputDto> departamentoPage = jdbcDepartamentoRepository.findAllDepartamentoByEmpresa(idEmpresa, paging);
+        ListaGenericDto<DepartamentoMinOutputDto> departamentosMin = new ListaGenericDto<>();
+        departamentosMin.setTotal(departamentoPage.getTotalElements());
+        departamentosMin.setLista(departamentoPage.getContent());
 
-        Page<EmpresaDepMinOutputDto> empresaPage = jdbcEmpresaDepRepository.findAll(paging);
-        ListaGenericDto<EmpresaDepMinOutputDto> empresasdepMin= new ListaGenericDto<>();
-        empresasdepMin.setTotal(empresaPage.getTotalElements());
-        empresasdepMin.setLista(empresaPage.getContent());
-
-        return empresasdepMin;
+        return departamentosMin;
     }
-
 
 }
