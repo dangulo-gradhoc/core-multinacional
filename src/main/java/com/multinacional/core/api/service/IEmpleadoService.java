@@ -11,6 +11,8 @@ public interface IEmpleadoService {
 
     EmpleadoOutputDto create(EmpleadoInputDto inputDto);
 
+    EmpleadoOutputDto update(EmpleadoInputDto inputDto);
+
     EmpleadoOutputDto findByEmpleado(Long idEmpleado);
 
     EmpleadoMinOutputDto findMinByEmpleado(Long idEmpleado);

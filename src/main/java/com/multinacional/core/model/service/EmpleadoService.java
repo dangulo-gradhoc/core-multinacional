@@ -23,7 +23,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class EmpleadoService implements IEmpleadoService {
+
     private final IEmpleadoDAO empleadoDAO;
+
     private final IDepartamentoDAO departamentoDAO;
 
     private final IEmpleadoDepDAO empleadoDepDAO;
@@ -58,10 +60,22 @@ public class EmpleadoService implements IEmpleadoService {
             empleadoDepDAO.save(empleadoDep);
         });
 
+
+
         return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
     }
 
+    @Override
+    public EmpleadoOutputDto update(EmpleadoInputDto inputDto) throws IllegalArgumentException{
+        if(inputDto.getId() == null){
+            throw new IllegalArgumentException("El empleado no puede ser null ");
+        }
+        final Empleado empleado= empleadoDAO.findById(inputDto.getId()).orElseThrow(()
+                -> new EntityNotFoundException());
 
+        BeanUtils.copyProperties(inputDto, empleado);
+        return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
+    }
 
     @Override
     public EmpleadoOutputDto findByEmpleado(Long idEmpleado) {

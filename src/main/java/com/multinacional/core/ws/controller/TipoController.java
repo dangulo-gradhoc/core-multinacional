@@ -2,6 +2,8 @@ package com.multinacional.core.ws.controller;
 
 import java.util.List;
 
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,16 @@ public class TipoController {
     public ResponseEntity<List<TipoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(tipoService.findAll());
+    }
+    @PostMapping("/update")
+    public ResponseEntity<TipoMinOutputDto>  update(@Valid @RequestBody TipoMinInputDto inputDto) {
+        log.debug("Tipo update {}", inputDto.getId());
+        try {
+            return ResponseEntity.ok(tipoService.update(inputDto));
+
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/create")

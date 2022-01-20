@@ -1,5 +1,7 @@
 package com.multinacional.core.ws.controller;
 
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoInputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
@@ -55,6 +57,16 @@ public class EmpleadoController {
         return ResponseEntity.ok(empleadoService.create(inputDto));
 
         }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    @PostMapping("/update")
+    public ResponseEntity<EmpleadoOutputDto>  update(@Valid @RequestBody EmpleadoInputDto inputDto) {
+        log.debug("Empleado update {}", inputDto.getId());
+        try {
+            return ResponseEntity.ok(empleadoService.update(inputDto));
+
+        }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
         }
     }

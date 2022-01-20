@@ -16,6 +16,8 @@ import com.multinacional.core.model.repositoryJpa.ITipoDAO;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class TipoService implements ITipoService {
@@ -44,6 +46,18 @@ public class TipoService implements ITipoService {
         final Tipo tipo=new Tipo();
         BeanUtils.copyProperties(inputDto, tipo);
 
+        return tipoMapper.convertToTipoMinOutputDto(tipoDAO.save(tipo));
+    }
+
+    @Override
+    public TipoMinOutputDto update(TipoMinInputDto inputDto) {
+        if(inputDto.getId() == null){
+            throw new IllegalArgumentException("El empleado no puede ser null ");
+        }
+        final Tipo tipo = tipoDAO.findById(inputDto.getId()).orElseThrow(()
+                ->new EntityNotFoundException());
+
+        BeanUtils.copyProperties(inputDto, tipo);
         return tipoMapper.convertToTipoMinOutputDto(tipoDAO.save(tipo));
     }
 
