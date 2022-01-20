@@ -5,14 +5,15 @@ import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import lombok.Data;
 
 @Data
-public class EmpleadoDepOutputDto {
+public class     EmpleadoDepOutputDto {
 
     private Long id;
+
+    private String cargo;
 
     private EmpleadoMinOutputDto empleado;
 
     private DepartamentoMinOutputDto departamento;
 
-    private String cargo;
 
 }

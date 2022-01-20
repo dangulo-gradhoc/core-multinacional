@@ -1,9 +1,8 @@
 package com.multinacional.core.api.service;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
-import com.multinacional.core.model.entity.Departamento;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface IDepartamentoService {
 
     List<DepartamentoMinOutputDto> findAll();
 
-    DepartamentoMinOutputDto create(DepartamentoInputDto departamentoInputDto);
+    DepartamentoMinOutputDto create(DepartamentoMinInputDto departamentoMinInputDto);
 
     DepartamentoMinOutputDto findByDepartamento(Long idDepartamento);
 

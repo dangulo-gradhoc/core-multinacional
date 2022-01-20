@@ -1,6 +1,6 @@
 package com.multinacional.core.api.dto.empresa;
 
-import com.multinacional.core.api.dto.tipo.TipoOutputDto;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import lombok.Data;
 
 @Data
@@ -12,5 +12,5 @@ public class EmpresaOutputDto {
 
     private String direccion;
 
-    private TipoOutputDto tipo;
+    private TipoMinOutputDto tipo;
 }

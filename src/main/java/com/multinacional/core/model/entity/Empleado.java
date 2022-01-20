@@ -43,5 +43,5 @@ public class Empleado implements Serializable {
 
 
     @OneToMany(mappedBy = "empleado")
-    private Set<EmpleadoDep> empleadoDep;
+    private Set<EmpleadoDep> empleadodep;
 }

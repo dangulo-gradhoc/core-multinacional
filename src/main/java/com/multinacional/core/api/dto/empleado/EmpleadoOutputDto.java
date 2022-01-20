@@ -9,4 +9,5 @@ public class EmpleadoOutputDto {
     private String dni;
     private String nombre;
     private String telefono;
+
 }

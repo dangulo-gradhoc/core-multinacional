@@ -1,6 +1,5 @@
 package com.multinacional.core.model.mapper;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.model.entity.Departamento;
 import org.mapstruct.Mapper;

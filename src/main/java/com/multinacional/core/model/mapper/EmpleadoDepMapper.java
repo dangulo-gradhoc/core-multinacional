@@ -11,4 +11,6 @@ public interface EmpleadoDepMapper {
 
     List<EmpleadoDepOutputDto> convertToEmpleadoDepOutputDtoList(List<EmpleadoDep> entities);
 
+    EmpleadoDepOutputDto convertToEmpleadoDepOutputDto(EmpleadoDep entity);
+
 }

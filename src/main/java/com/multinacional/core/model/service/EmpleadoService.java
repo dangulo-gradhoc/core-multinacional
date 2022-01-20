@@ -4,13 +4,19 @@ import com.multinacional.core.api.dto.empleado.EmpleadoInputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
 import com.multinacional.core.api.service.IEmpleadoService;
+import com.multinacional.core.model.entity.Departamento;
 import com.multinacional.core.model.entity.Empleado;
+import com.multinacional.core.model.entity.EmpleadoDep;
 import com.multinacional.core.model.mapper.EmpleadoMapper;
+import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
 import com.multinacional.core.model.repositoryJpa.IEmpleadoDAO;
+import com.multinacional.core.model.repositoryJpa.IEmpleadoDepDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +24,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EmpleadoService implements IEmpleadoService {
     private final IEmpleadoDAO empleadoDAO;
+    private final IDepartamentoDAO departamentoDAO;
+
+    private final IEmpleadoDepDAO empleadoDepDAO;
 
     private final EmpleadoMapper empleadoMapper;
 
@@ -28,19 +37,28 @@ public class EmpleadoService implements IEmpleadoService {
     }
 
     @Override
-    public EmpleadoOutputDto create(EmpleadoInputDto inputDto) throws IllegalArgumentException{
-        if(inputDto.getId() != null){
+    @Transactional
+    public EmpleadoOutputDto create(EmpleadoInputDto inputDto) throws IllegalArgumentException {
+        if (inputDto.getId() != null) {
             throw new IllegalArgumentException("Le emplead@ ya existe");
         }
-        if(inputDto.getDni()==null){
+        if (inputDto.getDni() == null) {
             throw new IllegalArgumentException("El DNI no puede ser null");
         }
-
         final Empleado empleado = new Empleado();
-        BeanUtils.copyProperties(inputDto,empleado);
-        empleadoDAO.save(empleado);
+        BeanUtils.copyProperties(inputDto, empleado, "empleadodep");
+        Empleado empleadoGuardado = empleadoDAO.save(empleado);
+        inputDto.getEmpleadodep().forEach(empleadodep -> {
+            Departamento departamento = departamentoDAO.findById(empleadodep.getCodDepartamento()).orElseThrow(() ->
+                    new EntityNotFoundException());
 
-        return empleadoMapper.convertToEmpleadoOutputDto(empleado);
+            EmpleadoDep empleadoDep = new EmpleadoDep
+                    (empleadodep.getId(),empleadodep.getCargo(),
+                     departamento,empleadoGuardado);
+            empleadoDepDAO.save(empleadoDep);
+        });
+
+        return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
     }
 
 

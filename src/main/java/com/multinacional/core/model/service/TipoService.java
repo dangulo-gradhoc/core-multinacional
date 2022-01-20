@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.multinacional.core.api.dto.tipo.TipoOutputDto;
 import com.multinacional.core.api.service.ITipoService;
 import com.multinacional.core.model.entity.Tipo;
 import com.multinacional.core.model.mapper.TipoMapper;
@@ -24,23 +25,38 @@ public class TipoService implements ITipoService {
     private final TipoMapper tipoMapper;
 
     @Override
-    public List<TipoOutputDto> findAll() {
+    public List<TipoMinOutputDto> findAll() {
         List<Tipo> entidades = new ArrayList<>();
         entidades = tipoDAO.findAll();
-        List<TipoOutputDto> listaFinal = tipoMapper.convertToTipoOutputDtoList(entidades);
+        List<TipoMinOutputDto> listaFinal = tipoMapper.convertToTipoMinOutputDtoList(entidades);
         return listaFinal;
     }
 
     @Override
-    public TipoOutputDto findByTipo(Long id) {
+    public TipoMinOutputDto create(TipoMinInputDto inputDto) throws IllegalArgumentException{
+
+        if(inputDto.getId() != null){
+            throw new IllegalArgumentException("El tipo de empresa ya existe");
+        }
+        if (inputDto.getNombre().isEmpty()){
+            throw new IllegalArgumentException("El nombre no puede ser null");
+        }
+        final Tipo tipo=new Tipo();
+        BeanUtils.copyProperties(inputDto, tipo);
+
+        return tipoMapper.convertToTipoMinOutputDto(tipoDAO.save(tipo));
+    }
+
+    @Override
+    public TipoMinOutputDto findByTipo(Long id) {
 
         Optional<Tipo> opTipo = tipoDAO.findById(id);
-        TipoOutputDto tipoOutputDto = new TipoOutputDto();
+        TipoMinOutputDto tipoMinOutputDto = new TipoMinOutputDto();
         if (opTipo.isPresent()) {
-            BeanUtils.copyProperties(opTipo.get(), tipoOutputDto);
+            BeanUtils.copyProperties(opTipo.get(), tipoMinOutputDto);
         }
 
-        return tipoOutputDto;
+        return tipoMinOutputDto;
     }
 
 }

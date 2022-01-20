@@ -1,13 +1,11 @@
 package com.multinacional.core.ws.controller;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
-import com.multinacional.core.api.dto.generic.Mensaje;
 import com.multinacional.core.api.service.IDepartamentoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +27,10 @@ public class DepartamentoController {
         return ResponseEntity.ok(departamentoService.findAll());
     }
     @PostMapping("/crear")
-    public ResponseEntity<DepartamentoMinOutputDto>  create(@Valid @RequestBody DepartamentoInputDto departamentoInputDto) {
+    public ResponseEntity<DepartamentoMinOutputDto>  create(@Valid @RequestBody DepartamentoMinInputDto departamentoMinInputDto) {
         log.debug("Departamento create");
         try {
-            return ResponseEntity.ok(departamentoService.create(departamentoInputDto));
+            return ResponseEntity.ok(departamentoService.create(departamentoMinInputDto));
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
         }

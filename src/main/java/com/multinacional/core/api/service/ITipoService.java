@@ -1,16 +1,18 @@
 package com.multinacional.core.api.service;
 
-import java.util.List;
-
+import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import org.springframework.stereotype.Repository;
 
-import com.multinacional.core.api.dto.tipo.TipoOutputDto;
+import java.util.List;
 
 @Repository
 public interface ITipoService {
 
-    List<TipoOutputDto> findAll();
+    List<TipoMinOutputDto> findAll();
 
-    TipoOutputDto findByTipo(Long idTipo);
+    TipoMinOutputDto create(TipoMinInputDto inputDto);
+
+    TipoMinOutputDto findByTipo(Long idTipo);
 
 }

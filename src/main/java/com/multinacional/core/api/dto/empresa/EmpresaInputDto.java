@@ -1,7 +1,5 @@
 package com.multinacional.core.api.dto.empresa;
 
-import com.multinacional.core.api.dto.tipo.TipoOutputDto;
-import com.multinacional.core.model.entity.Departamento;
 import lombok.Data;
 
 import java.util.Set;

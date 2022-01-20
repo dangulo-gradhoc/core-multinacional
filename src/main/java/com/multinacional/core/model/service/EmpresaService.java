@@ -52,7 +52,7 @@ public class EmpresaService implements IEmpresaService {
         if(inputDto.getId() != null){
             throw new IllegalArgumentException("La empresa ya existe");
         }
-        if(inputDto.getNombre()==null){
+        if(inputDto.getNombre().isEmpty()){
             throw new IllegalArgumentException("El nombre no puede ser null");
         }
         final Empresa empresa = new Empresa();
@@ -66,7 +66,7 @@ public class EmpresaService implements IEmpresaService {
 //        empresa.setListaDepartamento(listaDepartamento);
 
         empresa.setListaDepartamento(inputDto.getCodsDepartamentos().stream().map(
-                dep -> departamentoDAO.findById(dep).get()).collect(Collectors.toSet()));
+                dep -> departamentoDAO.findById(dep).orElseThrow(() -> new EntityNotFoundException())).collect(Collectors.toSet()));
 
         return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
     }

@@ -45,7 +45,7 @@ public class Empresa implements Serializable {
     private Tipo tipo;
 
     @ManyToMany
-    @JoinTable(name = "EmpresaDep",
+    @JoinTable(name = "empresadep",
             joinColumns = @JoinColumn(name = "codEmpresa"),
             inverseJoinColumns = @JoinColumn(name = "codDepartamento"))
     private Set<Departamento> listaDepartamento;

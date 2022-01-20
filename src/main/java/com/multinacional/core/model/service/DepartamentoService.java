@@ -1,6 +1,6 @@
 package com.multinacional.core.model.service;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
 import com.multinacional.core.api.service.IDepartamentoService;
@@ -40,7 +40,7 @@ public class DepartamentoService implements IDepartamentoService {
 
     @Override
     @Transactional
-    public DepartamentoMinOutputDto create(DepartamentoInputDto inputDto) throws IllegalArgumentException{
+    public DepartamentoMinOutputDto create(DepartamentoMinInputDto inputDto) throws IllegalArgumentException{
         if(inputDto.getId() != null){
             throw new IllegalArgumentException("El departamento ya existe");
         }
@@ -49,9 +49,8 @@ public class DepartamentoService implements IDepartamentoService {
         }
         final Departamento departamento=new Departamento();
         BeanUtils.copyProperties(inputDto, departamento, "Set<Empresas>","Set<EmpleadoDep>");
-        departamentoDAO.save(departamento);
 
-        return departamentoMapper.convertToDepartamentoOutputDto(departamento);
+        return departamentoMapper.convertToDepartamentoOutputDto(departamentoDAO.save(departamento));
     }
 
     @Override
