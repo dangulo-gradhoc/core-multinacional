@@ -26,7 +26,7 @@ public class DepartamentoController {
 
         return ResponseEntity.ok(departamentoService.findAll());
     }
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<DepartamentoMinOutputDto>  create(@Valid @RequestBody DepartamentoMinInputDto departamentoMinInputDto) {
         log.debug("Departamento create");
         try {
@@ -36,6 +36,16 @@ public class DepartamentoController {
         }
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<DepartamentoMinOutputDto>  update(@Valid @RequestBody DepartamentoMinInputDto inputDto) {
+        log.debug("Departamento update {}", inputDto.getId());
+        try {
+            return ResponseEntity.ok(departamentoService.update(inputDto));
+
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
     @GetMapping("/listar/{id}")
     public ResponseEntity<DepartamentoMinOutputDto> findByTipoId(@PathVariable Long id) {
         if (id == null) {

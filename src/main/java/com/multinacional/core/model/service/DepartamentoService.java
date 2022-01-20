@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,18 @@ public class DepartamentoService implements IDepartamentoService {
         final Departamento departamento=new Departamento();
         BeanUtils.copyProperties(inputDto, departamento, "Set<Empresas>","Set<EmpleadoDep>");
 
+        return departamentoMapper.convertToDepartamentoOutputDto(departamentoDAO.save(departamento));
+    }
+
+    @Override
+    public DepartamentoMinOutputDto update(DepartamentoMinInputDto inputDto) throws IllegalArgumentException{
+        if(inputDto.getId() == null){
+            throw new IllegalArgumentException("El departamento no puede ser null ");
+        }
+        final Departamento departamento= departamentoDAO.findById(inputDto.getId()).orElseThrow(()
+                -> new EntityNotFoundException());
+
+        BeanUtils.copyProperties(inputDto, departamento);
         return departamentoMapper.convertToDepartamentoOutputDto(departamentoDAO.save(departamento));
     }
 

@@ -34,7 +34,7 @@ public class EmpleadoDepService implements IEmpleadoDepService {
     }
 
     @Override
-    public EmpleadoDepOutputDto create(EmpleadoDepInputDto inputDto) throws IllegalArgumentException{
+    public EmpleadoDepOutputDto create(EmpleadoDepInputDto inputDto) throws RuntimeException {
         if(inputDto.getId() != null){
             throw new IllegalArgumentException("La empresa ya existe");
         }

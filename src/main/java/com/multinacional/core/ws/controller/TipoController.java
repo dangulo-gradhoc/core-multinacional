@@ -28,7 +28,7 @@ public class TipoController {
         return ResponseEntity.ok(tipoService.findAll());
     }
 
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<TipoMinOutputDto> create(@Valid @RequestBody TipoMinInputDto inputDto){
 
         try{

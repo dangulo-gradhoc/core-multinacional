@@ -29,7 +29,7 @@ public class EmpleadoDepController {
         return ResponseEntity.ok(empleadoDepService.findAll());
     }
 
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<EmpleadoDepOutputDto> create(@Valid @RequestBody EmpleadoDepInputDto inputDto) {
         log.debug("EmpleadoDep create");
         try {

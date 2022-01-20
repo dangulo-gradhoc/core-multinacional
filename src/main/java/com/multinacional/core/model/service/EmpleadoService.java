@@ -62,6 +62,7 @@ public class EmpleadoService implements IEmpleadoService {
     }
 
 
+
     @Override
     public EmpleadoOutputDto findByEmpleado(Long idEmpleado) {
         Optional<Empleado> opEmployable = empleadoDAO.findById(idEmpleado);

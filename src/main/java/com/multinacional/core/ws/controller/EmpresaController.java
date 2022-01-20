@@ -32,7 +32,7 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaService.findAll());
     }
 
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<EmpresaOutputDto> create(@Valid @RequestBody EmpresaInputDto inputDto){
         log.debug("Empresa create");
         try{

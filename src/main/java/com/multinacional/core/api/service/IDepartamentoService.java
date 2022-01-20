@@ -15,6 +15,8 @@ public interface IDepartamentoService {
 
     DepartamentoMinOutputDto create(DepartamentoMinInputDto departamentoMinInputDto);
 
+    DepartamentoMinOutputDto update(DepartamentoMinInputDto departamentoMinInputDto);
+
     DepartamentoMinOutputDto findByDepartamento(Long idDepartamento);
 
     ListaGenericDto<DepartamentoMinOutputDto> findAllDepartamentosByEmpresas(Long idEmpresa, Optional<Integer> pageNo, Optional<Integer> pageSize);
