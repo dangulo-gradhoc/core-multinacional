@@ -13,6 +13,8 @@ public interface IEmpleadoService {
 
     EmpleadoOutputDto update(EmpleadoInputDto inputDto);
 
+    Boolean delete(Long id);
+
     EmpleadoOutputDto findByEmpleado(Long idEmpleado);
 
     EmpleadoMinOutputDto findMinByEmpleado(Long idEmpleado);

@@ -16,6 +16,8 @@ public interface ITipoService {
 
     TipoMinOutputDto update(TipoMinInputDto inputDto);
 
+    Boolean delete(Long id);
+
     TipoMinOutputDto findByTipo(Long idTipo);
 
 }

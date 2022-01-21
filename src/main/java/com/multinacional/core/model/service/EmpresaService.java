@@ -9,6 +9,7 @@ import com.multinacional.core.model.entity.Departamento;
 import com.multinacional.core.model.repositoryJdbc.IJdbcEmpresaRepository;
 import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
 import com.multinacional.core.model.repositoryJpa.ITipoDAO;
+import com.multinacional.core.model.service.entitymanager.MultinacionalEntityManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmpresaService implements IEmpresaService {
+public class EmpresaService extends MultinacionalEntityManagerService implements IEmpresaService {
 
     private final IEmpresaDAO empresaDAO;
     private final ITipoDAO tipoDao;
@@ -56,7 +57,7 @@ public class EmpresaService implements IEmpresaService {
             throw new IllegalArgumentException("El nombre no puede ser null");
         }
         final Empresa empresa = new Empresa();
-        BeanUtils.copyProperties(inputDto, empresa, "tipo", "codsDepartamentos");
+        BeanUtils.copyProperties(inputDto, empresa, "codTipo", "codsDepartamentos");
 
         empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(() -> new EntityNotFoundException()));
 //        Set<Departamento> listaDepartamento = new HashSet<>();
@@ -70,6 +71,58 @@ public class EmpresaService implements IEmpresaService {
 
         return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
     }
+
+    @Override
+    @Transactional
+    public EmpresaOutputDto update(EmpresaInputDto inputDto) throws RuntimeException {
+        if(inputDto.getId() == null){
+            throw new IllegalArgumentException("El id no puede ser null ");
+        }
+
+        final Empresa empresa = empresaDAO.findById(inputDto.getId()).orElseThrow(()
+                -> new EntityNotFoundException());
+
+
+        BeanUtils.copyProperties(inputDto, empresa,"codsDepartamentos");
+        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(()-> new EntityNotFoundException()));
+        proccessEmpresaDepOnUpdate(empresa, inputDto.getCodsDepartamentos());
+        return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
+    }
+
+
+    public void proccessEmpresaDepOnUpdate(final Empresa empresa, final Set<Long> codsDepartamentos){
+
+        if(codsDepartamentos!=null && !codsDepartamentos.isEmpty()){
+            final Set<Departamento> departamentosNuevos= new HashSet<>();
+
+            for(final Long id : codsDepartamentos){
+                departamentosNuevos.add(entityManager.getReference(Departamento.class, id));
+            }
+            final Set<Long> departamentosBorrar = new HashSet<>();
+            for (final Departamento agrupacionDep : empresa.getListaDepartamento()){
+
+                if(!departamentosNuevos.contains(agrupacionDep)){
+                    departamentosBorrar.add(agrupacionDep.getId());
+                }
+            }
+            if (!departamentosBorrar.isEmpty()){
+                jdbcEmpresaRepository.deleteDepartamentos(empresa.getId(),departamentosBorrar);
+            }
+
+            empresa.addDepartamento(departamentosNuevos);
+        }else{
+            jdbcEmpresaRepository.deleteAllDepartamento(empresa.getId());
+        }
+
+    }
+    @Override
+    public Boolean delete(final Long id) throws RuntimeException{
+        Empresa empresa = empresaDAO.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException());
+        empresaDAO.delete(empresa);
+        return Boolean.TRUE;
+    }
+
     @Override
     public EmpresaOutputDto findByEmpresa(Long id) {
         Optional<Empresa> opEmpresa = empresaDAO.findById(id);

@@ -5,6 +5,7 @@ import com.multinacional.core.api.dto.empleadodep.EmpleadoDepInputDto;
 import com.multinacional.core.api.dto.empleadodep.EmpleadoDepMinOutputDto;
 import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import com.multinacional.core.api.service.IEmpleadoDepService;
+import com.multinacional.core.model.entity.Departamento;
 import com.multinacional.core.model.entity.EmpleadoDep;
 import com.multinacional.core.model.mapper.EmpleadoDepMapper;
 import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;

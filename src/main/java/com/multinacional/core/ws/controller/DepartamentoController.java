@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class DepartamentoController {
         }
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<DepartamentoMinOutputDto>  update(@Valid @RequestBody DepartamentoMinInputDto inputDto) {
         log.debug("Departamento update {}", inputDto.getId());
         try {
@@ -46,6 +47,7 @@ public class DepartamentoController {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @GetMapping("/listar/{id}")
     public ResponseEntity<DepartamentoMinOutputDto> findByTipoId(@PathVariable Long id) {
         if (id == null) {
@@ -64,4 +66,12 @@ public class DepartamentoController {
         return ResponseEntity.ok(departamentoService.findAllDepartamentosByEmpresas(idEmpresa, pageNo, pageSize));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(departamentoService.delete(id));
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

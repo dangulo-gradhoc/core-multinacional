@@ -14,6 +14,7 @@ import com.multinacional.core.api.service.ITipoService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class TipoController {
 
         return ResponseEntity.ok(tipoService.findAll());
     }
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<TipoMinOutputDto>  update(@Valid @RequestBody TipoMinInputDto inputDto) {
         log.debug("Tipo update {}", inputDto.getId());
         try {
@@ -61,5 +62,13 @@ public class TipoController {
         log.debug("findByTipoId {}", id);
         return ResponseEntity.ok(tipoService.findByTipo(id));
 
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(tipoService.delete(id));
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

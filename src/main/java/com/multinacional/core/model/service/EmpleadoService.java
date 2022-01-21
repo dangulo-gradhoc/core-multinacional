@@ -55,26 +55,34 @@ public class EmpleadoService implements IEmpleadoService {
                     new EntityNotFoundException());
 
             EmpleadoDep empleadoDep = new EmpleadoDep
-                    (empleadodep.getId(),empleadodep.getCargo(),
-                     departamento,empleadoGuardado);
+                    (empleadodep.getId(), empleadodep.getCargo(),
+                            departamento, empleadoGuardado);
             empleadoDepDAO.save(empleadoDep);
         });
-
 
 
         return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
     }
 
     @Override
-    public EmpleadoOutputDto update(EmpleadoInputDto inputDto) throws IllegalArgumentException{
-        if(inputDto.getId() == null){
-            throw new IllegalArgumentException("El empleado no puede ser null ");
+    @Transactional
+    public EmpleadoOutputDto update(EmpleadoInputDto inputDto) throws IllegalArgumentException {
+        if (inputDto.getId() == null) {
+            throw new IllegalArgumentException("El id no puede ser null ");
         }
-        final Empleado empleado= empleadoDAO.findById(inputDto.getId()).orElseThrow(()
+        final Empleado empleado = empleadoDAO.findById(inputDto.getId()).orElseThrow(()
                 -> new EntityNotFoundException());
 
         BeanUtils.copyProperties(inputDto, empleado);
         return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
+    }
+
+    @Override
+    public Boolean delete(final Long id) throws RuntimeException{
+        Empleado empleado = empleadoDAO.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException());
+        empleadoDAO.delete(empleado);
+        return Boolean.TRUE;
     }
 
     @Override
@@ -96,5 +104,6 @@ public class EmpleadoService implements IEmpleadoService {
         }
         return employableMinOutDto;
     }
+
 
 }

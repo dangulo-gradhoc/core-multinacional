@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
 import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
+import com.multinacional.core.model.entity.Empleado;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import com.multinacional.core.model.repositoryJpa.ITipoDAO;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +52,10 @@ public class TipoService implements ITipoService {
     }
 
     @Override
+    @Transactional
     public TipoMinOutputDto update(TipoMinInputDto inputDto) {
         if(inputDto.getId() == null){
-            throw new IllegalArgumentException("El empleado no puede ser null ");
+            throw new IllegalArgumentException("El id no puede ser null ");
         }
         final Tipo tipo = tipoDAO.findById(inputDto.getId()).orElseThrow(()
                 ->new EntityNotFoundException());
@@ -73,4 +76,11 @@ public class TipoService implements ITipoService {
         return tipoMinOutputDto;
     }
 
+    @Override
+    public Boolean delete(final Long id) throws RuntimeException{
+        Tipo tipo = tipoDAO.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException());
+        tipoDAO.delete(tipo);
+        return Boolean.TRUE;
+    }
 }

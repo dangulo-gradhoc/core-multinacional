@@ -3,8 +3,12 @@ package com.multinacional.core.ws.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
+import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.model.entity.Empresa;
+import com.multinacional.core.model.entity.Tipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +48,21 @@ public class EmpresaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<EmpresaOutputDto>  update(@Valid @RequestBody EmpresaInputDto inputDto) {
+        log.debug("Empresa update {}", inputDto.getId());
+        try {
+            return ResponseEntity.ok(empresaService.update(inputDto));
+
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+        catch (EntityNotFoundException en){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/listar/{id}")
     public ResponseEntity<EmpresaOutputDto> findByEmpresa(@PathVariable Long id) {
         if (id == null) {
@@ -70,5 +89,14 @@ public class EmpresaController {
                                                                                                 @RequestParam Optional<Integer> pageSize){
 
         return ResponseEntity.ok(empresaService.findAllEmpresasMinByTipo(nombreTipo, pageNo, pageSize));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(empresaService.delete(id));
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

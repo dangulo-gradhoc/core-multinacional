@@ -55,15 +55,24 @@ public class DepartamentoService implements IDepartamentoService {
     }
 
     @Override
+    @Transactional
     public DepartamentoMinOutputDto update(DepartamentoMinInputDto inputDto) throws IllegalArgumentException{
         if(inputDto.getId() == null){
-            throw new IllegalArgumentException("El departamento no puede ser null ");
+            throw new IllegalArgumentException("El id no puede ser null ");
         }
         final Departamento departamento= departamentoDAO.findById(inputDto.getId()).orElseThrow(()
                 -> new EntityNotFoundException());
 
         BeanUtils.copyProperties(inputDto, departamento);
         return departamentoMapper.convertToDepartamentoOutputDto(departamentoDAO.save(departamento));
+    }
+
+    @Override
+    public Boolean delete(final Long id)  throws EntityNotFoundException{
+        Departamento departamento=departamentoDAO.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException());
+        departamentoDAO.delete(departamento);
+        return Boolean.TRUE;
     }
 
     @Override

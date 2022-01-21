@@ -1,18 +1,15 @@
 package com.multinacional.core.ws.controller;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
-import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoInputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
-import com.multinacional.core.api.service.IDepartamentoService;
 import com.multinacional.core.api.service.IEmpleadoService;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -58,9 +55,11 @@ public class EmpleadoController {
 
         }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
         }
     }
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<EmpleadoOutputDto>  update(@Valid @RequestBody EmpleadoInputDto inputDto) {
         log.debug("Empleado update {}", inputDto.getId());
         try {
@@ -68,6 +67,14 @@ public class EmpleadoController {
 
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
+        }
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        try{
+            return ResponseEntity.ok(empleadoService.delete(id));
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
         }
     }
 }

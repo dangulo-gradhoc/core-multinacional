@@ -24,9 +24,12 @@ public class Departamento implements Serializable {
     @NotNull
     private String nombre;
 
-    @ManyToMany(mappedBy = "listaDepartamento", fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(name = "empresadep",
+            joinColumns = @JoinColumn(name = "codDepartamento"),
+            inverseJoinColumns = @JoinColumn(name="codEmpresa"))
     private Set<Empresa> listaEmpresa;
 
-    @OneToMany(mappedBy = "departamento")
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmpleadoDep> empleadoDep;
 }

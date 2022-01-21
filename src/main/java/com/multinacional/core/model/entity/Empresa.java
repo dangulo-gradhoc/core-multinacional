@@ -1,6 +1,7 @@
 package com.multinacional.core.model.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -49,4 +50,11 @@ public class Empresa implements Serializable {
             joinColumns = @JoinColumn(name = "codEmpresa"),
             inverseJoinColumns = @JoinColumn(name = "codDepartamento"))
     private Set<Departamento> listaDepartamento;
+
+    public void addDepartamento(Set<Departamento> departamentos) {
+        if (this.listaDepartamento== null) {
+            this.listaDepartamento = new HashSet<>();
+        }
+        this.listaDepartamento.addAll(departamentos);
+    }
 }

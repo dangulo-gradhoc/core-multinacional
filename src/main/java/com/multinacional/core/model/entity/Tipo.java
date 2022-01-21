@@ -3,11 +3,7 @@ package com.multinacional.core.model.entity;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +11,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.persistence.OneToMany;
 
 @Getter
 @Setter
@@ -34,6 +29,6 @@ public class Tipo implements Serializable {
     @NotNull
     private String nombre;
 
-    @OneToMany(mappedBy = "tipo")
+    @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Empresa> empresas;
 }
