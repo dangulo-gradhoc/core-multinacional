@@ -2,6 +2,7 @@ package com.multinacional.core.ws.controller;
 
 import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
+import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
 import com.multinacional.core.api.service.IDepartamentoService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,23 +28,24 @@ public class DepartamentoController {
 
         return ResponseEntity.ok(departamentoService.findAll());
     }
+
     @PostMapping("/create")
-    public ResponseEntity<DepartamentoMinOutputDto>  create(@Valid @RequestBody DepartamentoMinInputDto departamentoMinInputDto) {
+    public ResponseEntity<DepartamentoMinOutputDto> create(@Valid @RequestBody DepartamentoMinInputDto departamentoMinInputDto) {
         log.debug("Departamento create");
         try {
             return ResponseEntity.ok(departamentoService.create(departamentoMinInputDto));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<DepartamentoMinOutputDto>  update(@Valid @RequestBody DepartamentoMinInputDto inputDto) {
+    public ResponseEntity<DepartamentoMinOutputDto> update(@Valid @RequestBody DepartamentoMinInputDto inputDto) {
         log.debug("Departamento update {}", inputDto.getId());
         try {
             return ResponseEntity.ok(departamentoService.update(inputDto));
 
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -60,17 +62,29 @@ public class DepartamentoController {
 
     @GetMapping("/empresas/listar/{idEmpresa}")
     public ResponseEntity<ListaGenericDto<DepartamentoMinOutputDto>> findAllDepartamentosMinByEmpresas(@PathVariable Long idEmpresa,
-                                                                                                @RequestParam Optional<Integer> pageNo,
-                                                                                                @RequestParam Optional<Integer> pageSize){
+                                                                                                       @RequestParam Optional<Integer> pageNo,
+                                                                                                       @RequestParam Optional<Integer> pageSize) {
+        try {
+            return ResponseEntity.ok(departamentoService.findAllDepartamentosByEmpresas(idEmpresa, pageNo, pageSize));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-        return ResponseEntity.ok(departamentoService.findAllDepartamentosByEmpresas(idEmpresa, pageNo, pageSize));
+    @GetMapping("/empleados/listar/{idEmpleado}")
+    public ResponseEntity<ListaGenericDto<EmpleadoDepOutputDto>> findAllDepartamentosByEmpleados(@PathVariable Long idEmpleado,
+                                                                                                 @RequestParam Optional<Integer> pageNo,
+                                                                                                 @RequestParam Optional<Integer> pageSize) {
+
+        return ResponseEntity.ok(departamentoService.findAllDepartamentosByEmpleados(idEmpleado, pageNo, pageSize));
+
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(departamentoService.delete(id));
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -11,6 +11,9 @@ public class     EmpleadoDepOutputDto {
 
     private String cargo;
 
+    private Long codEmpleado;
+    private Long codDepartamento;
+
     private EmpleadoMinOutputDto empleado;
 
     private DepartamentoMinOutputDto departamento;

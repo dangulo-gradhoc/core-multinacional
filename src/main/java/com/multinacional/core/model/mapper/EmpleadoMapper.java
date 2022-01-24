@@ -1,5 +1,6 @@
 package com.multinacional.core.model.mapper;
 
+import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
 import com.multinacional.core.model.entity.Empleado;
 
@@ -13,5 +14,7 @@ public interface EmpleadoMapper {
     List<EmpleadoOutputDto> convertToEmpleadoOutputDtoList(List<Empleado> entities);
 
     EmpleadoOutputDto convertToEmpleadoOutputDto(Empleado entity);
+
+    EmpleadoMinOutputDto convertToEmpleadoMinOutputDto(Empleado entity);
 
 }

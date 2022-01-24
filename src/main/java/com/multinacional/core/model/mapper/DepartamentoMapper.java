@@ -11,5 +11,5 @@ public interface DepartamentoMapper {
 
     List<DepartamentoMinOutputDto> convertToDepartamentoOutputDtoList(List<Departamento> entities);
 
-    DepartamentoMinOutputDto convertToDepartamentoOutputDto(Departamento entity);
+    DepartamentoMinOutputDto convertToDepartamentoMinOutputDto(Departamento entity);
 }
