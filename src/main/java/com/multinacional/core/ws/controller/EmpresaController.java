@@ -24,19 +24,20 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/empresas")
 public class EmpresaController {
 
     @Autowired
     private IEmpresaService empresaService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<EmpresaOutputDto>> findAll() {
 
         return ResponseEntity.ok(empresaService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<EmpresaOutputDto> create(@Valid @RequestBody EmpresaInputDto inputDto){
         log.debug("Empresa create");
         try{
@@ -49,7 +50,7 @@ public class EmpresaController {
         }
     }
 
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<EmpresaOutputDto>  update(@Valid @RequestBody EmpresaInputDto inputDto) {
         log.debug("Empresa update {}", inputDto.getId());
         try {
@@ -63,7 +64,7 @@ public class EmpresaController {
         }
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EmpresaOutputDto> findByEmpresa(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -73,7 +74,7 @@ public class EmpresaController {
 
     }
 
-    @GetMapping("/listarMin/{id}")
+    @GetMapping("/min/{id}")
     public ResponseEntity<EmpresaMinOutputDto> findMinByEmpresa(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -83,15 +84,15 @@ public class EmpresaController {
 
     }
 
-    @GetMapping("/tipos/listarMin/{nombreTipo}")
-    public ResponseEntity<ListaGenericDto<EmpresaMinOutputDto>> findAllEmpresasMinByInstalacion(@PathVariable String nombreTipo,
+    @GetMapping("/tipos/min/{nombreTipo}")
+    public ResponseEntity<ListaGenericDto<EmpresaMinOutputDto>> findAllEmpresasMinByTipo(@PathVariable String nombreTipo,
                                                                                                 @RequestParam Optional<Integer> pageNo,
                                                                                                 @RequestParam Optional<Integer> pageSize){
 
         return ResponseEntity.ok(empresaService.findAllEmpresasMinByTipo(nombreTipo, pageNo, pageSize));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try {
             return ResponseEntity.ok(empresaService.delete(id));

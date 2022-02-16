@@ -1,15 +1,19 @@
 package com.multinacional.core.model.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
+import com.multinacional.core.api.dto.empresa.EmpresaMinOutputDto;
+import com.multinacional.core.api.dto.empresa.EmpresaOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.api.service.IEmpresaService;
 import com.multinacional.core.model.entity.Departamento;
+import com.multinacional.core.model.entity.Empresa;
+import com.multinacional.core.model.mapper.EmpresaMapper;
 import com.multinacional.core.model.repositoryJdbc.IJdbcEmpresaRepository;
 import com.multinacional.core.model.repositoryJpa.IDepartamentoDAO;
+import com.multinacional.core.model.repositoryJpa.IEmpresaDAO;
 import com.multinacional.core.model.repositoryJpa.ITipoDAO;
 import com.multinacional.core.model.service.entitymanager.MultinacionalEntityManagerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -18,17 +22,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.multinacional.core.api.dto.empresa.EmpresaMinOutputDto;
-import com.multinacional.core.api.dto.empresa.EmpresaOutputDto;
-import com.multinacional.core.api.service.IEmpresaService;
-import com.multinacional.core.model.entity.Empresa;
-import com.multinacional.core.model.mapper.EmpresaMapper;
-import com.multinacional.core.model.repositoryJpa.IEmpresaDAO;
-
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,13 +47,14 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
         List<Empresa> entities = empresaDAO.findAll();
         return empresaMapper.convertToEmpresaOutputDtoList(entities);
     }
+
     @Override
     @Transactional
-    public EmpresaOutputDto create(EmpresaInputDto inputDto) throws IllegalArgumentException{
-        if(inputDto.getId() != null){
+    public EmpresaOutputDto create(EmpresaInputDto inputDto) throws IllegalArgumentException {
+        if (inputDto.getId() != null) {
             throw new IllegalArgumentException("La empresa ya existe");
         }
-        if(inputDto.getNombre().isEmpty()){
+        if (inputDto.getNombre().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede ser null");
         }
         final Empresa empresa = new Empresa();
@@ -75,7 +76,7 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
     @Override
     @Transactional
     public EmpresaOutputDto update(EmpresaInputDto inputDto) throws RuntimeException {
-        if(inputDto.getId() == null){
+        if (inputDto.getId() == null) {
             throw new IllegalArgumentException("El id no puede ser null ");
         }
 
@@ -83,42 +84,43 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
                 -> new EntityNotFoundException());
 
 
-        BeanUtils.copyProperties(inputDto, empresa,"codsDepartamentos");
-        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(()-> new EntityNotFoundException()));
+        BeanUtils.copyProperties(inputDto, empresa, "codsDepartamentos");
+        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(() -> new EntityNotFoundException()));
         proccessEmpresaDepOnUpdate(empresa, inputDto.getCodsDepartamentos());
         return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
     }
 
 
-    public void proccessEmpresaDepOnUpdate(final Empresa empresa, final Set<Long> codsDepartamentos){
+    public void proccessEmpresaDepOnUpdate(final Empresa empresa, final Set<Long> codsDepartamentos) {
 
-        if(codsDepartamentos!=null && !codsDepartamentos.isEmpty()){
-            final Set<Departamento> departamentosNuevos= new HashSet<>();
+        if (codsDepartamentos != null && !codsDepartamentos.isEmpty()) {
+            final Set<Departamento> departamentosNuevos = new HashSet<>();
 
-            for(final Long id : codsDepartamentos){
+            for (final Long id : codsDepartamentos) {
                 departamentosNuevos.add(entityManager.getReference(Departamento.class, id));
             }
             final Set<Long> departamentosBorrar = new HashSet<>();
-            for (final Departamento agrupacionDep : empresa.getListaDepartamento()){
+            for (final Departamento agrupacionDep : empresa.getListaDepartamento()) {
 
-                if(!departamentosNuevos.contains(agrupacionDep)){
+                if (!departamentosNuevos.contains(agrupacionDep)) {
                     departamentosBorrar.add(agrupacionDep.getId());
                 }
             }
-            if (!departamentosBorrar.isEmpty()){
-                jdbcEmpresaRepository.deleteDepartamentos(empresa.getId(),departamentosBorrar);
+            if (!departamentosBorrar.isEmpty()) {
+                jdbcEmpresaRepository.deleteDepartamentos(empresa.getId(), departamentosBorrar);
             }
 
             empresa.addDepartamento(departamentosNuevos);
-        }else{
+        } else {
             jdbcEmpresaRepository.deleteAllDepartamento(empresa.getId());
         }
 
     }
+
     @Override
-    public Boolean delete(final Long id) throws RuntimeException{
+    public Boolean delete(final Long id) throws RuntimeException {
         Empresa empresa = empresaDAO.findById(id)
-                .orElseThrow(() ->new EntityNotFoundException());
+                .orElseThrow(() -> new EntityNotFoundException());
         empresaDAO.delete(empresa);
         return Boolean.TRUE;
     }
@@ -145,8 +147,7 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
 
     @Override
     public ListaGenericDto<EmpresaMinOutputDto> findAllEmpresasMinByTipo(String nombreTipo, Optional<Integer> pageNo,
-                                                                         Optional<Integer> pageSize)
-    {
+                                                                         Optional<Integer> pageSize) {
         log.info("Solicitando Empresas el nombre de tipo -> {}", nombreTipo);
         Pageable paging = PageRequest.of(pageNo.orElse(0), pageSize.orElse(Integer.MAX_VALUE),
                 Sort.by("nombre").ascending());

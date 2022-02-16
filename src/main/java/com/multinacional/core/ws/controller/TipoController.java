@@ -19,18 +19,19 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tipos")
 public class TipoController {
 
     @Autowired
     private ITipoService tipoService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<TipoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(tipoService.findAll());
     }
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<TipoMinOutputDto>  update(@Valid @RequestBody TipoMinInputDto inputDto) {
         log.debug("Tipo update {}", inputDto.getId());
         try {
@@ -41,7 +42,7 @@ public class TipoController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<TipoMinOutputDto> create(@Valid @RequestBody TipoMinInputDto inputDto){
 
         try{
@@ -54,7 +55,7 @@ public class TipoController {
 
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TipoMinOutputDto> findByTipoId(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -63,7 +64,7 @@ public class TipoController {
         return ResponseEntity.ok(tipoService.findByTipo(id));
 
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try {
             return ResponseEntity.ok(tipoService.delete(id));

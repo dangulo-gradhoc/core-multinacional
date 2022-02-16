@@ -15,19 +15,20 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/empleados")
 public class EmpleadoController {
 
     @Autowired
     private IEmpleadoService empleadoService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<EmpleadoOutputDto>> findAll() {
 
         return ResponseEntity.ok(empleadoService.findAll());
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EmpleadoOutputDto> findByEmpleado(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -37,7 +38,7 @@ public class EmpleadoController {
 
     }
 
-    @GetMapping("/listarMin/{id}")
+    @GetMapping("/min/{id}")
     public ResponseEntity<EmpleadoMinOutputDto> findMinByEmpleado(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -47,7 +48,7 @@ public class EmpleadoController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public  ResponseEntity<EmpleadoOutputDto> create(@Valid @RequestBody EmpleadoInputDto inputDto){
         log.debug("Empleado create");
         try{
@@ -59,7 +60,7 @@ public class EmpleadoController {
             return ResponseEntity.notFound().build();
         }
     }
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<EmpleadoOutputDto>  update(@Valid @RequestBody EmpleadoInputDto inputDto) {
         log.debug("Empleado update {}", inputDto.getId());
         try {
@@ -69,7 +70,7 @@ public class EmpleadoController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try{
             return ResponseEntity.ok(empleadoService.delete(id));

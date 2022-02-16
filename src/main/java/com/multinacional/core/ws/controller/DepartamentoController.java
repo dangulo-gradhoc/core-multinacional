@@ -17,19 +17,20 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/departamentos")
 public class DepartamentoController {
 
     @Autowired
     private IDepartamentoService departamentoService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<DepartamentoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(departamentoService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<DepartamentoMinOutputDto> create(@Valid @RequestBody DepartamentoMinInputDto departamentoMinInputDto) {
         log.debug("Departamento create");
         try {
@@ -39,7 +40,7 @@ public class DepartamentoController {
         }
     }
 
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<DepartamentoMinOutputDto> update(@Valid @RequestBody DepartamentoMinInputDto inputDto) {
         log.debug("Departamento update {}", inputDto.getId());
         try {
@@ -50,7 +51,7 @@ public class DepartamentoController {
         }
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DepartamentoMinOutputDto> findByTipoId(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -60,7 +61,7 @@ public class DepartamentoController {
 
     }
 
-    @GetMapping("/empresas/listar/{idEmpresa}")
+    @GetMapping("/empresas/{idEmpresa}")
     public ResponseEntity<ListaGenericDto<DepartamentoMinOutputDto>> findAllDepartamentosMinByEmpresas(@PathVariable Long idEmpresa,
                                                                                                        @RequestParam Optional<Integer> pageNo,
                                                                                                        @RequestParam Optional<Integer> pageSize) {
@@ -71,7 +72,7 @@ public class DepartamentoController {
         }
     }
 
-    @GetMapping("/empleados/listar/{idEmpleado}")
+    @GetMapping("/empleados/{idEmpleado}")
     public ResponseEntity<ListaGenericDto<EmpleadoDepOutputDto>> findAllDepartamentosByEmpleados(@PathVariable Long idEmpleado,
                                                                                                  @RequestParam Optional<Integer> pageNo,
                                                                                                  @RequestParam Optional<Integer> pageSize) {
@@ -80,7 +81,7 @@ public class DepartamentoController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(departamentoService.delete(id));

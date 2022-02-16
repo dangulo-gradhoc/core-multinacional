@@ -14,22 +14,21 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-
-
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/empleadosdep")
 public class EmpleadoDepController {
 
     @Autowired
     private IEmpleadoDepService empleadoDepService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<EmpleadoDepOutputDto>> findAll() {
 
         return ResponseEntity.ok(empleadoDepService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<EmpleadoDepOutputDto> create(@Valid @RequestBody EmpleadoDepInputDto inputDto) {
         log.debug("EmpleadoDep create");
         try {
@@ -41,7 +40,7 @@ public class EmpleadoDepController {
         }
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EmpleadoDepOutputDto> findByEmpleadoDep(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -51,7 +50,7 @@ public class EmpleadoDepController {
 
     }
 
-    @GetMapping("/listarMin/{id}")
+    @GetMapping("/min/{id}")
     public ResponseEntity<EmpleadoDepMinOutputDto> findMinByEmpleadoDep(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
