@@ -39,6 +39,13 @@ public class EmpleadoService implements IEmpleadoService {
     }
 
     @Override
+    public List<EmpleadoOutputDto> findByNombre(String nombre) {
+        List<Empleado> entidades= empleadoDAO.findAllByNombre(nombre);
+        List<EmpleadoOutputDto> listaFinal= empleadoMapper.convertToEmpleadoOutputDtoList(entidades);
+        return listaFinal;
+    }
+
+    @Override
     @Transactional
     public EmpleadoOutputDto create(EmpleadoInputDto inputDto) throws IllegalArgumentException {
         if (inputDto.getId() != null) {
@@ -75,6 +82,12 @@ public class EmpleadoService implements IEmpleadoService {
 
         BeanUtils.copyProperties(inputDto, empleado);
         return empleadoMapper.convertToEmpleadoOutputDto(empleadoDAO.save(empleado));
+    }
+
+    @Override
+    public Boolean deleteAll() {
+        empleadoDAO.deleteAll();
+        return true;
     }
 
     @Override

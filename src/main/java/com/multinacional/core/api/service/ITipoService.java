@@ -12,11 +12,15 @@ public interface ITipoService {
 
     List<TipoMinOutputDto> findAll();
 
+    List<TipoMinOutputDto> findByNombre(String nombre);
+
     TipoMinOutputDto create(TipoMinInputDto inputDto);
 
     TipoMinOutputDto update(TipoMinInputDto inputDto);
 
     Boolean delete(Long id);
+
+    Boolean deleteAll();
 
     TipoMinOutputDto findByTipo(Long idTipo);
 

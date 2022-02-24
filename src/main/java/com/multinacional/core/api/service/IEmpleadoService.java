@@ -9,9 +9,13 @@ import java.util.List;
 public interface IEmpleadoService {
     List<EmpleadoOutputDto> findAll();
 
+    List<EmpleadoOutputDto> findByNombre(String nombre);
+
     EmpleadoOutputDto create(EmpleadoInputDto inputDto);
 
     EmpleadoOutputDto update(EmpleadoInputDto inputDto);
+
+    Boolean deleteAll();
 
     Boolean delete(Long id);
 

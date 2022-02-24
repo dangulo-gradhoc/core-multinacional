@@ -2,14 +2,12 @@ package com.multinacional.core.ws.controller;
 
 import java.util.List;
 
-import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
-import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import com.multinacional.core.api.service.ITipoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +19,18 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tipos")
+@RequiredArgsConstructor
 public class TipoController {
 
-    @Autowired
-    private ITipoService tipoService;
+    private final ITipoService tipoService;
 
     @GetMapping
     public ResponseEntity<List<TipoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(tipoService.findAll());
     }
+
+
     @PatchMapping
     public ResponseEntity<TipoMinOutputDto>  update(@Valid @RequestBody TipoMinInputDto inputDto) {
         log.debug("Tipo update {}", inputDto.getId());
@@ -63,6 +63,21 @@ public class TipoController {
         log.debug("findByTipoId {}", id);
         return ResponseEntity.ok(tipoService.findByTipo(id));
 
+    }
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity <List<TipoMinOutputDto>> findAllByNombre(@PathVariable String nombre){
+        if (nombre == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try{
+            return ResponseEntity.ok(tipoService.findByNombre(nombre));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteAll(){
+        return ResponseEntity.ok(tipoService.deleteAll());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){

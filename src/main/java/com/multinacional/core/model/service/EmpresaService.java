@@ -49,6 +49,13 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
     }
 
     @Override
+    public List<EmpresaOutputDto> findByNombre(String nombre) {
+        List<Empresa> entidades = empresaDAO.findAllByNombre(nombre);
+        List<EmpresaOutputDto> listaFinal = empresaMapper.convertToEmpresaOutputDtoList(entidades);
+        return listaFinal;
+    }
+
+    @Override
     @Transactional
     public EmpresaOutputDto create(EmpresaInputDto inputDto) throws IllegalArgumentException {
         if (inputDto.getId() != null) {
@@ -60,12 +67,7 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
         final Empresa empresa = new Empresa();
         BeanUtils.copyProperties(inputDto, empresa, "codTipo", "codsDepartamentos");
 
-        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(() -> new EntityNotFoundException()));
-//        Set<Departamento> listaDepartamento = new HashSet<>();
-//        for (Long dep : inputDto.getCodsDepartamentos()) {
-//            listaDepartamento.add( departamentoDAO.findById(dep).get());
-//        }
-//        empresa.setListaDepartamento(listaDepartamento);
+        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).get());
 
         empresa.setListaDepartamento(inputDto.getCodsDepartamentos().stream().map(
                 dep -> departamentoDAO.findById(dep).orElseThrow(() -> new EntityNotFoundException())).collect(Collectors.toSet()));
@@ -85,7 +87,7 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
 
 
         BeanUtils.copyProperties(inputDto, empresa, "codsDepartamentos");
-        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).orElseThrow(() -> new EntityNotFoundException()));
+        empresa.setTipo(tipoDao.findById(inputDto.getCodTipo()).get());
         proccessEmpresaDepOnUpdate(empresa, inputDto.getCodsDepartamentos());
         return empresaMapper.convertToEmpresaOutputDto(empresaDAO.save(empresa));
     }
@@ -123,6 +125,12 @@ public class EmpresaService extends MultinacionalEntityManagerService implements
                 .orElseThrow(() -> new EntityNotFoundException());
         empresaDAO.delete(empresa);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean deleteAll() {
+        empresaDAO.deleteAll();
+        return true;
     }
 
     @Override

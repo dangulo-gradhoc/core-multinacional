@@ -52,6 +52,13 @@ public class DepartamentoService implements IDepartamentoService {
     }
 
     @Override
+    public List<DepartamentoMinOutputDto> findByNombre(String nombre) {
+        List<Departamento> entidades= departamentoDAO.findAllByNombre(nombre);
+        List<DepartamentoMinOutputDto> listaFinal= departamentoMapper.convertToDepartamentoOutputDtoList(entidades);
+        return listaFinal;
+    }
+
+    @Override
     @Transactional
     public DepartamentoMinOutputDto create(DepartamentoMinInputDto inputDto) throws IllegalArgumentException{
         if(inputDto.getId() != null){
@@ -77,6 +84,12 @@ public class DepartamentoService implements IDepartamentoService {
 
         BeanUtils.copyProperties(inputDto, departamento);
         return departamentoMapper.convertToDepartamentoMinOutputDto(departamentoDAO.save(departamento));
+    }
+
+    @Override
+    public Boolean deleteAll() {
+        departamentoDAO.deleteAll();
+        return true;
     }
 
     @Override

@@ -7,8 +7,10 @@ import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empresa.EmpresaInputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import com.multinacional.core.model.entity.Empresa;
 import com.multinacional.core.model.entity.Tipo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +28,27 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/empresas")
+@RequiredArgsConstructor
 public class EmpresaController {
 
-    @Autowired
-    private IEmpresaService empresaService;
+    private final IEmpresaService empresaService;
 
     @GetMapping
     public ResponseEntity<List<EmpresaOutputDto>> findAll() {
 
         return ResponseEntity.ok(empresaService.findAll());
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity <List<EmpresaOutputDto>> findAllByNombre(@PathVariable String nombre){
+        if (nombre == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try{
+            return ResponseEntity.ok(empresaService.findByNombre(nombre));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
@@ -99,5 +113,9 @@ public class EmpresaController {
         }catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
+    }
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteAll(){
+        return ResponseEntity.ok(empresaService.deleteAll());
     }
 }

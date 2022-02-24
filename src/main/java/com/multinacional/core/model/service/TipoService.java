@@ -1,12 +1,10 @@
 package com.multinacional.core.model.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.multinacional.core.api.dto.tipo.TipoMinInputDto;
 import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
-import com.multinacional.core.model.entity.Empleado;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +28,17 @@ public class TipoService implements ITipoService {
 
     @Override
     public List<TipoMinOutputDto> findAll() {
-        List<Tipo> entidades = new ArrayList<>();
-        entidades = tipoDAO.findAll();
+        List<Tipo> entidades = tipoDAO.findAll();
         List<TipoMinOutputDto> listaFinal = tipoMapper.convertToTipoMinOutputDtoList(entidades);
+        return listaFinal;
+    }
+
+
+
+    @Override
+    public List<TipoMinOutputDto> findByNombre(String nombre)  throws  IllegalArgumentException{
+        List<Tipo> entidades = tipoDAO.findAllByNombre(nombre);
+        List<TipoMinOutputDto> listaFinal= tipoMapper.convertToTipoMinOutputDtoList(entidades);
         return listaFinal;
     }
 
@@ -82,5 +88,11 @@ public class TipoService implements ITipoService {
                 .orElseThrow(() ->new EntityNotFoundException());
         tipoDAO.delete(tipo);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean deleteAll() {
+        tipoDAO.deleteAll();
+        return true;
     }
 }

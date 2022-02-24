@@ -4,6 +4,7 @@ import com.multinacional.core.api.dto.departamento.DepartamentoMinInputDto;
 import com.multinacional.core.api.dto.departamento.DepartamentoMinOutputDto;
 import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import com.multinacional.core.api.dto.generic.ListaGenericDto;
+import com.multinacional.core.api.dto.tipo.TipoMinOutputDto;
 import com.multinacional.core.api.service.IDepartamentoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,18 @@ public class DepartamentoController {
     public ResponseEntity<List<DepartamentoMinOutputDto>> findAll() {
 
         return ResponseEntity.ok(departamentoService.findAll());
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity <List<DepartamentoMinOutputDto>> findAllByNombre(@PathVariable String nombre){
+        if (nombre == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try{
+            return ResponseEntity.ok(departamentoService.findByNombre(nombre));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
@@ -79,6 +92,11 @@ public class DepartamentoController {
 
         return ResponseEntity.ok(departamentoService.findAllDepartamentosByEmpleados(idEmpleado, pageNo, pageSize));
 
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteAll(){
+        return ResponseEntity.ok(departamentoService.deleteAll());
     }
 
     @DeleteMapping("/{id}")
