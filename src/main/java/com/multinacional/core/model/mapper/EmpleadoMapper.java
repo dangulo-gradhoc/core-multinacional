@@ -13,6 +13,8 @@ public interface EmpleadoMapper {
 
     List<EmpleadoOutputDto> convertToEmpleadoOutputDtoList(List<Empleado> entities);
 
+
+
     EmpleadoOutputDto convertToEmpleadoOutputDto(Empleado entity);
 
     EmpleadoMinOutputDto convertToEmpleadoMinOutputDto(Empleado entity);
