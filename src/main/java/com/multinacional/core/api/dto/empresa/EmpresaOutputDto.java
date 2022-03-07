@@ -13,4 +13,5 @@ public class EmpresaOutputDto {
     private String direccion;
 
     private TipoMinOutputDto tipo;
+
 }

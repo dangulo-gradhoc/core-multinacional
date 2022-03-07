@@ -4,7 +4,6 @@ import com.multinacional.core.api.dto.empleadodep.EmpleadoDepOutputDto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class EmpleadoOutputDto {

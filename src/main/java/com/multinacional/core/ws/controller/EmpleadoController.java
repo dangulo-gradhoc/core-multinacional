@@ -4,6 +4,7 @@ import com.multinacional.core.api.dto.empleado.EmpleadoInputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoMinOutputDto;
 import com.multinacional.core.api.dto.empleado.EmpleadoOutputDto;
 import com.multinacional.core.api.service.IEmpleadoService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/empleados")
+@RequiredArgsConstructor
 public class EmpleadoController {
 
     @Autowired
